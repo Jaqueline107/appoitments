@@ -1,0 +1,14 @@
+{
+    "type": "postgres",
+    "host": "localhost",
+    "port": 5432,
+    "username": "postgres",
+    "password":"123",
+    "database": "Appointment", 
+    "migrations": [
+        "./src/data/migrations/*.ts"
+     ],
+    "cli": {
+        "migrationsDir":"./src/data/migrations"
+    }
+}
