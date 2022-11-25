@@ -1,4 +1,4 @@
-import AppointmentModel from "../models/Appointments";
+import AppointmentModel from "../models/appointmentModel";
 import {
   PrismaClient,
   Appointment as AppointmentEntity,
@@ -6,6 +6,7 @@ import {
 } from "@prisma/client";
 import prisma from "../data/prisma";
 import { isEqual } from "date-fns";
+
 import appointmentsRouter from "../routes/appointments.routes";
 
 interface createAppointmenDTO {
@@ -22,16 +23,16 @@ class AppointmentsRepository {
   }
 
   public async all() {
-    const findMany = await prisma.appointment.findMany();
-    return findMany || null;
+    const findMany = await this.prisma.appointment.findMany();
+
+    return findMany;
   }
 
   public async findByDate(date: Date): Promise<AppointmentEntity | null> {
-    const findAppointment = await prisma.appointment.findFirst({
+    const findAppointment = await this.prisma.appointment.findFirst({
       where: { date: { equals: date } },
     });
 
-    console.log(findAppointment);
     return findAppointment;
   }
 
@@ -41,6 +42,7 @@ class AppointmentsRepository {
     where,
   }: createAppointmenDTO): Promise<AppointmentModel> {
     const appointment = new AppointmentModel({ provider, date, where });
+
     await prisma.appointment.create({ data: appointment });
     console.log(appointment);
     return appointment;

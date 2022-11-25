@@ -1,44 +1,29 @@
-import AppointmentsRepository from "../repositorio/AppointmentsRepository";
-import Appointment from "../models/Appointments";
 import { startOfHour } from "date-fns";
-import prisma from "../data/prisma";
-import AppointmentModel from "../models/Appointments";
+import AppointmentsRepository from "../repository/appointmentsRepository";
+import { Request, Response } from "express";
 
-interface Request {
-  provider: string;
-  date: Date;
-  where: string;
-}
+export default class CreateServiceAppointments {
+  public async create(request: Request, response: Response): Promise<Response> {
+    try {
+      const { where, provider, date } = request.body;
 
-class CreateAppointmenService {
-  private appointmentsRepository: AppointmentsRepository;
-  constructor(appoitmentsRepository: AppointmentsRepository) {
-    this.appointmentsRepository = appoitmentsRepository;
-  }
-  public async execute({
-    date,
-    provider,
-    where,
-  }: Request): Promise<Appointment> {
-    const AppointmentDate = startOfHour(date);
+      const appointmentsRepository = new AppointmentsRepository();
 
-    // const findAppotimentInSamDate = await prisma.appointment.findFirstOrThrow({
-    //   where: { date: { equals: AppointmentDate } },
-    // });
+      const AppointmentDate = startOfHour(date);
 
-    const findAppotimentInSamDate =
-      await this.appointmentsRepository.findByDate(AppointmentDate);
+      const findAppotimentInSameDate = await appointmentsRepository.findByDate(
+        AppointmentDate
+      );
 
-    if (findAppotimentInSamDate) {
-      throw Error("This appontiment already booked ");
+      if (findAppotimentInSameDate) {
+        throw Error("This appontiment already booked ");
+      }
+
+      appointmentsRepository.create({ date: AppointmentDate, provider, where });
+
+      return response.json({ where, provider, date: AppointmentDate });
+    } catch (err: any) {
+      return response.status(400).json({ error: err.message });
     }
-
-    const appointment = await this.appointmentsRepository.create({
-      provider,
-      date: AppointmentDate,
-      where,
-    });
-    return appointment;
   }
 }
-export default CreateAppointmenService;

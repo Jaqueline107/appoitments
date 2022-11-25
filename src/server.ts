@@ -1,15 +1,13 @@
-import appointmentsRouter from "./routes/appointments.routes";
-import express, { request } from "express";
 import "./data/prisma";
+import express from "express";
+import routes from "./routes";
+
 const app = express();
 
-app.get("/", (request, response) => {
-  return response.json({
-    menssage: "Hello World",
-  });
-});
 app.use(express.json());
-app.use("/appointments", appointmentsRouter);
-app.listen(3333, () => {
+
+app.use(routes);
+
+app.listen(3333, async () => {
   console.log("server started in port 3333 ");
 });

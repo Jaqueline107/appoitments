@@ -1,38 +1,19 @@
-import { Router } from "express";
-import { parseISO } from "date-fns";
-import AppointmentsRepository from "../repositorio/AppointmentsRepository";
-import CreateAppointmenService from "../services/CreateAppointmentsService";
-import prisma from "../data/prisma";
+import { request, Router } from "express";
+
+import ensoreAthenticated from "../middlewares/ensure.Athenticated";
+
+import CreateServiceAppointments from "../services/CreateAppointmentsService";
+import AppointmentController from "../services/GetAllServiceAppointments";
+
+const createServiceAppointments = new CreateServiceAppointments();
+const getAllAppointments = new AppointmentController();
 
 const appointmentsRouter = Router();
 
-const appointmentsRepository = new AppointmentsRepository();
+appointmentsRouter.use(ensoreAthenticated);
 
-appointmentsRouter.get("/", async (resquest, response) => {
-  const appointments = await appointmentsRepository.all();
-  return response.json(appointments);
-  // response.send("Hello");
-});
+appointmentsRouter.get("/", getAllAppointments.getAll);
 
-appointmentsRouter.post("/", async (resquest, response) => {
-  try {
-    const { provider, date, where } = resquest.body;
-
-    const ParseDate = parseISO(date);
-
-    const createAppointmen = new CreateAppointmenService(
-      appointmentsRepository
-    );
-    const appointment = await createAppointmen.execute({
-      date: ParseDate,
-      provider,
-      where,
-    });
-
-    return response.json(appointment);
-  } catch (Error) {
-    return response.status(400).json({ message: "this appointment is boked" });
-  }
-});
+appointmentsRouter.post("/", createServiceAppointments.create);
 
 export default appointmentsRouter;

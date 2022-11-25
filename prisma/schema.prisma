@@ -13,6 +13,18 @@ datasource db {
 model Appointment {
   id       String   @id @unique @default(uuid())
   provider String
-  date     DateTime @unique
+  date     DateTime
   where    String
+}
+
+model User {
+  id       String @id @unique @default(uuid())
+  email    String
+  name     String
+  password String
+}
+
+model Profile_Img {
+  id   String @id @unique @default(uuid())
+  name String
 }

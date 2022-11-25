@@ -1,6 +1,5 @@
 import { uuid } from "uuidv4";
-import { Prisma } from "@prisma/client";
-
+import UsersModel from "./usersModel";
 class AppointmentModel {
   id: string;
 
