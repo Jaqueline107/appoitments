@@ -10,6 +10,7 @@ import { isEqual } from "date-fns";
 import appointmentsRouter from "../routes/appointments.routes";
 
 interface createAppointmenDTO {
+  userId: number;
   provider: string;
   date: Date;
   where: string;
@@ -40,9 +41,10 @@ class AppointmentsRepository {
     provider,
     date,
     where,
+    userId,
   }: createAppointmenDTO): Promise<AppointmentModel> {
-    const appointment = new AppointmentModel({ provider, date, where });
-
+    const appointment = new AppointmentModel({ provider, date, where, userId });
+    console.log(appointment);
     await prisma.appointment.create({ data: appointment });
     console.log(appointment);
     return appointment;

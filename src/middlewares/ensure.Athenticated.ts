@@ -23,8 +23,6 @@ export default function ensoreAthenticated(
   try {
     const token = authHeader.split(" ")[1];
 
-    console.log(token, "token");
-
     const decode = verify(token, authConfig.jwt.secret);
 
     const { sub } = decode as Tokenpayload;

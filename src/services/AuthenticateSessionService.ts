@@ -12,7 +12,7 @@ interface Request {
 interface Response {
   user: {
     email: undefined | string;
-    id: undefined | string;
+    id: undefined | number;
     name: undefined | string;
   };
   token: string;
@@ -31,14 +31,12 @@ class CreateSessionService {
       id: user?.id,
     };
 
-    console.log(password, email, "AAAAAAAAAAAAA");
-
     if (!user) {
       throw Error("Email/password is incorrect");
     }
 
     const passwordMatched = await compare(password, user.password);
-
+    console.log(password, user.password);
     if (!passwordMatched) {
       throw Error("Email/password is incorrect");
     }
@@ -46,7 +44,7 @@ class CreateSessionService {
     const { secret, expiresIn } = authConfig.jwt;
 
     const token = sign({}, secret, {
-      subject: user.id,
+      notBefore: user.id,
       expiresIn,
     });
 

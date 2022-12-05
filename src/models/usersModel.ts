@@ -1,7 +1,7 @@
 import { uuid } from "uuidv4";
 
 class UsersModel {
-  id: string;
+  userId: number;
 
   name: string;
 
@@ -14,18 +14,19 @@ class UsersModel {
   update_at!: Date;
 
   constructor({
+    userId,
     name,
     email,
     password,
     create_at,
     update_at,
-  }: Omit<UsersModel, "id">) {
-    this.id = uuid();
+  }: UsersModel) {
+    this.userId = userId;
     this.name = name;
     this.email = email;
     this.password = password;
-    this.create_at = this.create_at;
-    this.update_at = this.update_at;
+    this.create_at = create_at;
+    this.update_at = update_at;
   }
 }
 

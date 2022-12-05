@@ -18,14 +18,15 @@ class CreateUserService {
       throw new Error("this email already exist");
     }
     console.log(checkUserExist, "asdfasdAA");
+
     const hashPassword = await hash(password, 8);
 
-    const user = await prisma.user.create({
-      data: { email, name, password },
+    const User = await prisma.user.create({
+      data: { email, name, password: hashPassword },
     });
 
-    console.log(user);
-    return user;
+    console.log(User);
+    return User;
   }
 }
 

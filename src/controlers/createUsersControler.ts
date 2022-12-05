@@ -1,5 +1,3 @@
-import prisma from "../data/prisma";
-import { hash } from "bcryptjs";
 import { Request, Response } from "express";
 import CreateUserService from "../services/CreateUserService";
 

@@ -5,7 +5,7 @@ import { Request, Response } from "express";
 export default class CreateServiceAppointments {
   public async create(request: Request, response: Response): Promise<Response> {
     try {
-      const { where, provider, date } = request.body;
+      const { where, provider, date, userId } = request.body;
 
       const appointmentsRepository = new AppointmentsRepository();
 
@@ -19,7 +19,12 @@ export default class CreateServiceAppointments {
         throw Error("This appontiment already booked ");
       }
 
-      appointmentsRepository.create({ date: AppointmentDate, provider, where });
+      appointmentsRepository.create({
+        date: AppointmentDate,
+        provider,
+        where,
+        userId,
+      });
 
       return response.json({ where, provider, date: AppointmentDate });
     } catch (err: any) {
